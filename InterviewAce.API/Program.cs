@@ -1,20 +1,22 @@
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using InterviewAce.Application.Configurations;
+using InterviewAce.Application.DTOs.Common;
 using InterviewAce.Application.Interfaces;
 using InterviewAce.Application.Interfaces.Authentication;
 using InterviewAce.Application.Interfaces.Persistence;
 using InterviewAce.Application.Services.Authentication;
 using InterviewAce.Application.Services.Profile;
+using InterviewAce.Application.Validators.Authentication;
 using InterviewAce.Infrastructure.Persistence;
 using InterviewAce.Infrastructure.Persistence.Repositories;
 using InterviewAce.Infrastructure.Services;
 using InterviewAce.Infrastructure.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FluentValidation;
-using InterviewAce.Application.Validators.Authentication;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,7 +73,33 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 
 // Controllers
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(x => x.Value?.Errors.Count > 0)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.Value!.Errors
+                        .Select(e => e.ErrorMessage)
+                        .ToArray()
+                );
+
+
+            var response = new ApiErrorResponseDto
+            {
+                Success = false,
+                Message = "Validation failed",
+                Errors = errors
+            };
+
+
+            return new BadRequestObjectResult(response);
+        };
+    });
 
 builder.Services
     .AddFluentValidationAutoValidation()
