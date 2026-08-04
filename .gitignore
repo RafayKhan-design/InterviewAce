@@ -1,0 +1,26 @@
+# Build output
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# Database files
+*.db
+
+# Publish output
+publish/
+
+# Node modules (future frontend)
+node_modules/
