@@ -1,12 +1,11 @@
 ﻿using InterviewAce.API.Controllers.Base;
+using InterviewAce.Application.DTOs.Common;
 using InterviewAce.Application.DTOs.Profile;
 using InterviewAce.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace InterviewAce.API.Controllers;
-
 
 [Authorize]
 public class ProfileController : BaseApiController
@@ -34,11 +33,21 @@ public class ProfileController : BaseApiController
         if (profile == null)
         {
             return BadRequest(
-                "Profile already exists.");
+                new ApiResponseDto<object>(
+                    false,
+                    "Profile already exists."
+                )
+            );
         }
 
 
-        return Ok(profile);
+        return Ok(
+            new ApiResponseDto<ProfileResponseDto>(
+                true,
+                "Profile created successfully.",
+                profile
+            )
+        );
     }
 
 
@@ -53,11 +62,22 @@ public class ProfileController : BaseApiController
 
         if (profile == null)
         {
-            return NotFound();
+            return NotFound(
+                new ApiResponseDto<object>(
+                    false,
+                    "Profile not found."
+                )
+            );
         }
 
 
-        return Ok(profile);
+        return Ok(
+            new ApiResponseDto<ProfileResponseDto>(
+                true,
+                "Profile retrieved successfully.",
+                profile
+            )
+        );
     }
 
 
@@ -73,10 +93,21 @@ public class ProfileController : BaseApiController
 
         if (profile == null)
         {
-            return NotFound();
+            return NotFound(
+                new ApiResponseDto<object>(
+                    false,
+                    "Profile not found."
+                )
+            );
         }
 
 
-        return Ok(profile);
+        return Ok(
+            new ApiResponseDto<ProfileResponseDto>(
+                true,
+                "Profile updated successfully.",
+                profile
+            )
+        );
     }
 }
