@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using InterviewAce.API.Middleware;
 using InterviewAce.Application.Configurations;
 using InterviewAce.Application.DTOs.Common;
 using InterviewAce.Application.Interfaces;
@@ -142,6 +143,8 @@ builder.Services.AddSwaggerGen(options =>
 
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 
 // HTTP Request Pipeline
