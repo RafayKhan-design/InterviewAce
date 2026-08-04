@@ -24,5 +24,8 @@
     <ProjectReference Include="..\InterviewAce.Application\InterviewAce.Application.csproj" />
     <ProjectReference Include="..\InterviewAce.Domain\InterviewAce.Domain.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
 </Project>

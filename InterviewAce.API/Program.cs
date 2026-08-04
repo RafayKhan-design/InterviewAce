@@ -1,5 +1,4 @@
 using FluentValidation;
-using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using InterviewAce.API.Middleware;
 using InterviewAce.Application.Configurations;
@@ -7,19 +6,24 @@ using InterviewAce.Application.DTOs.Common;
 using InterviewAce.Application.Interfaces;
 using InterviewAce.Application.Interfaces.Authentication;
 using InterviewAce.Application.Interfaces.Persistence;
+using InterviewAce.Application.Interfaces.Resume;
+using InterviewAce.Application.Interfaces.Storage;
 using InterviewAce.Application.Services.Authentication;
 using InterviewAce.Application.Services.Profile;
+using InterviewAce.Application.Services.Resume;
 using InterviewAce.Application.Validators.Authentication;
 using InterviewAce.Infrastructure.Persistence;
 using InterviewAce.Infrastructure.Persistence.Repositories;
 using InterviewAce.Infrastructure.Services;
 using InterviewAce.Infrastructure.Services.Authentication;
+using InterviewAce.Infrastructure.Services.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +69,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
+builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
+
+builder.Services.AddScoped<IResumeService, ResumeService>();
+
 builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -72,6 +80,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+
+builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+
 
 
 

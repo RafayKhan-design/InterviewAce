@@ -25,6 +25,25 @@ public class ExceptionHandlingMiddleware
         {
             await _next(context);
         }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogWarning(ex.Message);
+
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+
+            var response = new ApiErrorResponseDto
+            {
+                Success = false,
+                Message = ex.Message,
+                Errors = null
+            };
+
+
+            await context.Response.WriteAsJsonAsync(response);
+        }
         catch (Exception ex)
         {
             _logger.LogError(
