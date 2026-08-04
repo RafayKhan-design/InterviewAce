@@ -38,7 +38,7 @@ public class ExceptionHandlingMiddleware
 
 
     private static async Task HandleExceptionAsync(
-        HttpContext context)
+    HttpContext context)
     {
         context.Response.ContentType = "application/json";
 
@@ -46,12 +46,10 @@ public class ExceptionHandlingMiddleware
             (int)HttpStatusCode.InternalServerError;
 
 
-        var response = new ApiErrorResponseDto
-        {
-            Success = false,
-            Message = "An unexpected error occurred.",
-            Errors = null
-        };
+        var response = new ApiResponseDto<object>(
+            false,
+            "An unexpected error occurred."
+        );
 
 
         var json = JsonSerializer.Serialize(response);
