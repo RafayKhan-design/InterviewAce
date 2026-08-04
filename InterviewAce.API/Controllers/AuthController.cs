@@ -19,7 +19,11 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-
+    /// <summary>
+    /// Registers a new user account.
+    /// </summary>
+    /// <param name="request">User registration details including email and password.</param>
+    /// <returns>A success response when the account is created.</returns>
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto request)
     {
@@ -44,7 +48,11 @@ public class AuthController : ControllerBase
         );
     }
 
-
+    /// <summary>
+    /// Authenticates a user and returns JWT tokens.
+    /// </summary>
+    /// <param name="request">User email and password.</param>
+    /// <returns>Access token and refresh token information.</returns>
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto request)
     {
@@ -70,6 +78,10 @@ public class AuthController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Returns the currently authenticated user's information.
+    /// </summary>
+    /// <returns>User ID and email extracted from JWT claims.</returns>
     [Authorize]
     [HttpGet("me")]
     public IActionResult GetCurrentUser()
@@ -92,6 +104,11 @@ public class AuthController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Generates a new JWT token using a valid refresh token.
+    /// </summary>
+    /// <param name="request">Refresh token request.</param>
+    /// <returns>New access and refresh tokens.</returns>
     [HttpPost("refresh-token")]
     public async Task<IActionResult> RefreshToken(
     RefreshTokenRequestDto request)

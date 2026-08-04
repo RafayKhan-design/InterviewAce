@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using InterviewAce.API.Middleware;
 using InterviewAce.Application.Configurations;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -113,30 +115,49 @@ builder.Services.AddValidatorsFromAssembly(
 // Swagger
 builder.Services.AddSwaggerGen(options =>
 {
-    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Enter your JWT token like this: Bearer {your token}"
+        Title = "InterviewAce API",
+        Version = "v1",
+        Description = "Backend API for the InterviewAce AI Interview Preparation Platform."
     });
 
 
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    // XML Documentation
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+    var xmlPath = Path.Combine(
+        AppContext.BaseDirectory,
+        xmlFile
+    );
+
+    options.IncludeXmlComments(xmlPath);
+
+
+    // JWT Authentication
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token.\n\nExample:\nBearer eyJhbGciOiJIUzI1NiIs..."
+    });
+
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            new OpenApiSecurityScheme
             {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                Reference = new OpenApiReference
                 {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
                 }
             },
-
-            new string[] {}
+            Array.Empty<string>()
         }
     });
 });

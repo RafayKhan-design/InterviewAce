@@ -20,7 +20,11 @@ public class ProfileController : BaseApiController
     }
 
 
-
+    /// <summary>
+    /// Creates a profile for the authenticated user.
+    /// </summary>
+    /// <param name="request">Profile information.</param>
+    /// <returns>The created profile details.</returns>
     [HttpPost]
     [Route("api/profile")]
     public async Task<IActionResult> Create(
@@ -51,7 +55,10 @@ public class ProfileController : BaseApiController
     }
 
 
-
+    /// <summary>
+    /// Retrieves the authenticated user's profile.
+    /// </summary>
+    /// <returns>User profile information.</returns>
     [HttpGet]
     [Route("api/profile/me")]
     public async Task<IActionResult> GetMyProfile()
@@ -81,7 +88,11 @@ public class ProfileController : BaseApiController
     }
 
 
-
+    /// <summary>
+    /// Updates the authenticated user's profile.
+    /// </summary>
+    /// <param name="request">Updated profile information.</param>
+    /// <returns>The updated profile details.</returns>
     [HttpPut]
     [Route("api/profile")]
     public async Task<IActionResult> Update(
