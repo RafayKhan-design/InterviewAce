@@ -3,6 +3,7 @@ using InterviewAce.Application.Interfaces.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using InterviewAce.Application.DTOs.Common;
 
 namespace InterviewAce.API.Controllers;
 
@@ -26,34 +27,47 @@ public class AuthController : ControllerBase
 
         if (!result)
         {
-            return BadRequest(new
-            {
-                message = "Email already exists"
-            });
+            return BadRequest(
+                new ApiResponseDto<object>(
+                    false,
+                    "Email already exists."
+                )
+            );
         }
 
-        return Ok(new
-        {
-            message = "User registered successfully"
-        });
+
+        return Ok(
+            new ApiResponseDto<object>(
+                true,
+                "User registered successfully."
+            )
+        );
     }
 
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto request)
     {
-    
         var result = await _authService.LoginAsync(request);
 
         if (result == null)
         {
-            return Unauthorized(new
-            {
-                message = "Invalid email or password"
-            });
+            return Unauthorized(
+                new ApiResponseDto<object>(
+                    false,
+                    "Invalid email or password."
+                )
+            );
         }
 
-        return Ok(result);
+
+        return Ok(
+            new ApiResponseDto<LoginResponseDto>(
+                true,
+                "Login successful.",
+                result
+            )
+        );
     }
 
     [Authorize]
@@ -63,13 +77,19 @@ public class AuthController : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var email = User.FindFirstValue(ClaimTypes.Email);
-        
 
-        return Ok(new
-        {
-            UserId = userId,
-            Email = email
-        });
+
+        return Ok(
+            new ApiResponseDto<object>(
+                true,
+                "Current user retrieved successfully.",
+                new
+                {
+                    UserId = userId,
+                    Email = email
+                }
+            )
+        );
     }
 
     [HttpPost("refresh-token")]
@@ -82,10 +102,21 @@ public class AuthController : ControllerBase
 
         if (result == null)
         {
-            return Unauthorized();
+            return Unauthorized(
+                new ApiResponseDto<object>(
+                    false,
+                    "Invalid or expired refresh token."
+                )
+            );
         }
 
 
-        return Ok(result);
+        return Ok(
+            new ApiResponseDto<LoginResponseDto>(
+                true,
+                "Token refreshed successfully.",
+                result
+            )
+        );
     }
 }
