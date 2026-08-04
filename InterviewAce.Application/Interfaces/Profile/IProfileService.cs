@@ -14,6 +14,6 @@ public interface IProfileService
 
 
     Task<ProfileResponseDto?> UpdateAsync(
-        Guid userId,
-        CreateProfileDto request);
+    Guid userId,
+    UpdateProfileDto request);
 }

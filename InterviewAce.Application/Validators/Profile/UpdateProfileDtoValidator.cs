@@ -3,10 +3,10 @@ using InterviewAce.Application.DTOs.Profile;
 
 namespace InterviewAce.Application.Validators.Profile;
 
-public class CreateProfileDtoValidator
-    : AbstractValidator<CreateProfileDto>
+public class UpdateProfileDtoValidator
+    : AbstractValidator<UpdateProfileDto>
 {
-    public CreateProfileDtoValidator()
+    public UpdateProfileDtoValidator()
     {
         RuleFor(x => x.FullName)
             .NotEmpty()

@@ -82,7 +82,7 @@ public class ProfileService : IProfileService
 
     public async Task<ProfileResponseDto?> UpdateAsync(
         Guid userId,
-        CreateProfileDto request)
+        UpdateProfileDto request)
     {
         var profile = await _profileRepository.GetByUserIdAsync(userId);
 

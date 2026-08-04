@@ -85,7 +85,7 @@ public class ProfileController : BaseApiController
     [HttpPut]
     [Route("api/profile")]
     public async Task<IActionResult> Update(
-        CreateProfileDto request)
+        UpdateProfileDto request)
     {
         var profile = await _profileService
             .UpdateAsync(CurrentUserId, request);
