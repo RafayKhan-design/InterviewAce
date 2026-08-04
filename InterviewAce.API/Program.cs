@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using InterviewAce.Application.Configurations;
 using InterviewAce.Application.Interfaces;
 using InterviewAce.Application.Interfaces.Authentication;
@@ -12,6 +13,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FluentValidation;
+using InterviewAce.Application.Validators.Authentication;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,9 +69,17 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 
+
 // Controllers
 builder.Services.AddControllers();
 
+builder.Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssembly(
+    typeof(RegisterDtoValidator).Assembly
+);
 
 // Swagger
 builder.Services.AddSwaggerGen(options =>
