@@ -16,4 +16,8 @@ public interface IResumeService
     Task<bool> DeleteAsync(
         Guid userId,
         Guid resumeId);
+
+    Task<(byte[] FileBytes, string FileType, string FileName)?> DownloadAsync(
+    Guid userId,
+    Guid resumeId);
 }

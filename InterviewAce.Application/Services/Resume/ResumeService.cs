@@ -163,4 +163,29 @@ public class ResumeService : IResumeService
 
         return true;
     }
+
+    public async Task<(byte[] FileBytes, string FileType, string FileName)?> DownloadAsync(
+    Guid userId,
+    Guid resumeId)
+    {
+        var resume = await _resumeRepository
+            .GetByIdAsync(resumeId);
+
+
+        if (resume == null || resume.UserId != userId)
+        {
+            return null;
+        }
+
+
+        var fileBytes = await _fileStorageService
+            .DownloadAsync(resume.FilePath);
+
+
+        return (
+            fileBytes,
+            resume.FileType,
+            resume.FileName
+        );
+    }
 }

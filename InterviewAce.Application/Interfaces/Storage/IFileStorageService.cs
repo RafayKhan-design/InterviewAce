@@ -11,4 +11,7 @@ public interface IFileStorageService
 
     Task DeleteAsync(
         string filePath);
+
+    Task<byte[]> DownloadAsync(
+    string filePath);
 }

@@ -79,4 +79,24 @@ public class LocalFileStorageService : IFileStorageService
 
         return Task.CompletedTask;
     }
+
+    public async Task<byte[]> DownloadAsync(
+    string filePath)
+    {
+        var fullPath = Path.Combine(
+            _environment.WebRootPath,
+            filePath
+        );
+
+
+        if (!File.Exists(fullPath))
+        {
+            throw new FileNotFoundException(
+                "File not found."
+            );
+        }
+
+
+        return await File.ReadAllBytesAsync(fullPath);
+    }
 }
