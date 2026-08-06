@@ -1,6 +1,9 @@
 ﻿using InterviewAce.Application.DTOs.ResumeAnalysis;
+using InterviewAce.Application.Interfaces.AI;
+using InterviewAce.Application.Interfaces.Extraction;
 using InterviewAce.Application.Interfaces.Persistence;
 using InterviewAce.Application.Interfaces.ResumeAnalysis;
+using InterviewAce.Application.Interfaces.Storage;
 using ResumeAnalysisEntity = InterviewAce.Domain.Entities.ResumeAnalysis;
 
 namespace InterviewAce.Application.Services.ResumeAnalysis;
@@ -9,14 +12,20 @@ public class ResumeAnalysisService : IResumeAnalysisService
 {
     private readonly IResumeRepository _resumeRepository;
     private readonly IResumeAnalysisRepository _resumeAnalysisRepository;
+    private readonly IResumeAnalyzer _resumeAnalyzer;
+    private readonly IResumeTextExtractor _resumeTextExtractor;
 
 
     public ResumeAnalysisService(
         IResumeRepository resumeRepository,
-        IResumeAnalysisRepository resumeAnalysisRepository)
+        IResumeAnalysisRepository resumeAnalysisRepository,
+        IResumeAnalyzer resumeAnalyzer,
+        IResumeTextExtractor resumeTextExtractor)
     {
         _resumeRepository = resumeRepository;
         _resumeAnalysisRepository = resumeAnalysisRepository;
+        _resumeAnalyzer = resumeAnalyzer;
+        _resumeTextExtractor = resumeTextExtractor;
     }
 
 
@@ -51,49 +60,28 @@ public class ResumeAnalysisService : IResumeAnalysisService
 
 
 
-        /*
-         Future Flow:
-
-         Resume File
-              |
-              |
-         Text Extraction
-              |
-              |
-         AI Analysis
-              |
-              |
-         Save Structured Result
-
-        */
+        // Extract text based on file type
+        var extractedText = await _resumeTextExtractor
+            .ExtractTextAsync(
+                resume.FilePath,
+                resume.FileType
+            );
 
 
-        var analysis = new ResumeAnalysisEntity
-        {
-            Id = Guid.NewGuid(),
 
-            ResumeId = resume.Id,
+        // AI Analysis
+        var analysis = await _resumeAnalyzer
+            .AnalyzeAsync(extractedText);
 
-            ExtractedText = string.Empty,
 
-            Skills = null,
 
-            Experience = null,
+        analysis.Id = Guid.NewGuid();
 
-            Education = null,
+        analysis.ResumeId = resume.Id;
 
-            Projects = null,
+        analysis.ExtractedText = extractedText;
 
-            Certifications = null,
-
-            Strengths = null,
-
-            Weaknesses = null,
-
-            ResumeScore = 0,
-
-            CreatedAt = DateTime.UtcNow
-        };
+        analysis.CreatedAt = DateTime.UtcNow;
 
 
 

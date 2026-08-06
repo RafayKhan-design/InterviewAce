@@ -4,7 +4,9 @@ using InterviewAce.API.Middleware;
 using InterviewAce.Application.Configurations;
 using InterviewAce.Application.DTOs.Common;
 using InterviewAce.Application.Interfaces;
+using InterviewAce.Application.Interfaces.AI;
 using InterviewAce.Application.Interfaces.Authentication;
+using InterviewAce.Application.Interfaces.Extraction;
 using InterviewAce.Application.Interfaces.JobDescription;
 using InterviewAce.Application.Interfaces.Persistence;
 using InterviewAce.Application.Interfaces.Resume;
@@ -19,7 +21,9 @@ using InterviewAce.Application.Validators.Authentication;
 using InterviewAce.Infrastructure.Persistence;
 using InterviewAce.Infrastructure.Persistence.Repositories;
 using InterviewAce.Infrastructure.Services;
+using InterviewAce.Infrastructure.Services.AI;
 using InterviewAce.Infrastructure.Services.Authentication;
+using InterviewAce.Infrastructure.Services.Extraction;
 using InterviewAce.Infrastructure.Services.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -85,6 +89,8 @@ builder.Services.AddScoped<IJobDescriptionService, JobDescriptionService>();
 
 builder.Services.AddScoped<IResumeAnalysisService, ResumeAnalysisService>();
 
+builder.Services.AddScoped<IResumeAnalyzer, OpenAiResumeAnalyzer>();
+
 builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -94,6 +100,14 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+
+builder.Services.AddScoped<IResumeTextExtractor, ResumeTextExtractor>();
+
+builder.Services.AddScoped<PdfTextExtractor>();
+
+builder.Services.AddScoped<DocxTextExtractor>();
+
+builder.Services.AddScoped<TxtTextExtractor>();
 
 
 
