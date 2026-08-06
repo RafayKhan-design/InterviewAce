@@ -8,6 +8,9 @@ public class ApiResponseDto<T>
 
     public T? Data { get; set; }
 
+    public ApiResponseDto()
+    {
+    }
 
     public ApiResponseDto(
         bool success,

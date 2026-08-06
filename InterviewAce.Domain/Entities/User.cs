@@ -24,4 +24,7 @@ public class User
     public CandidateProfile? CandidateProfile { get; set; }
 
     public ICollection<Resume> Resumes { get; set; } = new List<Resume>();
+
+    public ICollection<JobDescription> JobDescriptions { get; set; }
+    = new List<JobDescription>();
 }

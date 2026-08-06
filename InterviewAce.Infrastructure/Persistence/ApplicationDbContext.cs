@@ -21,6 +21,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Resume> Resumes { get; set; }
 
+    public DbSet<JobDescription> JobDescriptions { get; set; }
+
 
 
 
@@ -86,5 +88,11 @@ public class ApplicationDbContext : DbContext
             .WithMany(x => x.Resumes)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<JobDescription>()
+    .HasOne(x => x.User)
+    .WithMany(x => x.JobDescriptions)
+    .HasForeignKey(x => x.UserId)
+    .OnDelete(DeleteBehavior.Cascade);
     }
 }

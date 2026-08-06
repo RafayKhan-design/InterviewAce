@@ -25,4 +25,8 @@
     <ProjectReference Include="..\InterviewAce.Infrastructure\InterviewAce.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\resumes\" />
+  </ItemGroup>
+
 </Project>
