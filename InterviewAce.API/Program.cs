@@ -8,11 +8,13 @@ using InterviewAce.Application.Interfaces.Authentication;
 using InterviewAce.Application.Interfaces.JobDescription;
 using InterviewAce.Application.Interfaces.Persistence;
 using InterviewAce.Application.Interfaces.Resume;
+using InterviewAce.Application.Interfaces.ResumeAnalysis;
 using InterviewAce.Application.Interfaces.Storage;
 using InterviewAce.Application.Services.Authentication;
 using InterviewAce.Application.Services.JobDescription;
 using InterviewAce.Application.Services.Profile;
 using InterviewAce.Application.Services.Resume;
+using InterviewAce.Application.Services.ResumeAnalysis;
 using InterviewAce.Application.Validators.Authentication;
 using InterviewAce.Infrastructure.Persistence;
 using InterviewAce.Infrastructure.Persistence.Repositories;
@@ -73,11 +75,15 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 
+builder.Services.AddScoped<IResumeAnalysisRepository, ResumeAnalysisRepository>();
+
 builder.Services.AddScoped<IJobDescriptionRepository, JobDescriptionRepository>();
 
 builder.Services.AddScoped<IResumeService, ResumeService>();
 
 builder.Services.AddScoped<IJobDescriptionService, JobDescriptionService>();
+
+builder.Services.AddScoped<IResumeAnalysisService, ResumeAnalysisService>();
 
 builder.Services.AddScoped<IProfileService, ProfileService>();
 

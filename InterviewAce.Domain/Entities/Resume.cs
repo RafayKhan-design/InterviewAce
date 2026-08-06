@@ -29,4 +29,7 @@ public class Resume
 
     // Navigation Property
     public User User { get; set; } = null!;
+
+    // Navigation Property
+    public ResumeAnalysis? ResumeAnalysis { get; set; }
 }

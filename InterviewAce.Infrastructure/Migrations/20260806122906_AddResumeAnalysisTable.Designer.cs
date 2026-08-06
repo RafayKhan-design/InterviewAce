@@ -3,6 +3,7 @@ using System;
 using InterviewAce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InterviewAce.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260806122906_AddResumeAnalysisTable")]
+    partial class AddResumeAnalysisTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,17 +295,12 @@ namespace InterviewAce.Infrastructure.Migrations
             modelBuilder.Entity("InterviewAce.Domain.Entities.ResumeAnalysis", b =>
                 {
                     b.HasOne("InterviewAce.Domain.Entities.Resume", "Resume")
-                        .WithOne("ResumeAnalysis")
+                        .WithOne()
                         .HasForeignKey("InterviewAce.Domain.Entities.ResumeAnalysis", "ResumeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Resume");
-                });
-
-            modelBuilder.Entity("InterviewAce.Domain.Entities.Resume", b =>
-                {
-                    b.Navigation("ResumeAnalysis");
                 });
 
             modelBuilder.Entity("InterviewAce.Domain.Entities.User", b =>
