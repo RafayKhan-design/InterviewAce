@@ -3,6 +3,7 @@ using System;
 using InterviewAce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InterviewAce.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260807155232_AddAIModelAndPromptVersion")]
+    partial class AddAIModelAndPromptVersion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,6 +176,10 @@ namespace InterviewAce.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AIModel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Certifications")
                         .IsRequired()
                         .HasColumnType("text");
@@ -193,6 +200,10 @@ namespace InterviewAce.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Projects")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PromptVersion")
                         .IsRequired()
                         .HasColumnType("text");
 

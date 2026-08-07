@@ -5,6 +5,7 @@ using InterviewAce.Application.Interfaces.Persistence;
 using InterviewAce.Application.Interfaces.Processing;
 using InterviewAce.Application.Interfaces.ResumeAnalysis;
 using InterviewAce.Application.Interfaces.Storage;
+using System.Text.Json;
 using ResumeAnalysisEntity = InterviewAce.Domain.Entities.ResumeAnalysis;
 
 namespace InterviewAce.Application.Services.ResumeAnalysis;
@@ -52,14 +53,14 @@ public class ResumeAnalysisService : IResumeAnalysisService
 
 
         // Prevent duplicate analysis
-        var existingAnalysis = await _resumeAnalysisRepository
-            .GetByResumeIdAsync(request.ResumeId);
+        //var existingAnalysis = await _resumeAnalysisRepository
+        //    .GetByResumeIdAsync(request.ResumeId);
 
 
-        if (existingAnalysis != null)
-        {
-            return MapToResponse(existingAnalysis);
-        }
+        //if (existingAnalysis != null)
+        //{
+        //    return MapToResponse(existingAnalysis);
+        //}
 
 
 
@@ -88,6 +89,7 @@ public class ResumeAnalysisService : IResumeAnalysisService
         analysis.ExtractedText = extractedText;
 
         analysis.CreatedAt = DateTime.UtcNow;
+
 
 
 
@@ -142,7 +144,7 @@ public class ResumeAnalysisService : IResumeAnalysisService
 
 
     private static ResumeAnalysisResponseDto MapToResponse(
-        ResumeAnalysisEntity analysis)
+    ResumeAnalysisEntity analysis)
     {
         return new ResumeAnalysisResponseDto
         {
@@ -152,23 +154,34 @@ public class ResumeAnalysisService : IResumeAnalysisService
 
             ExtractedText = analysis.ExtractedText,
 
-            Skills = analysis.Skills,
 
-            Experience = analysis.Experience,
+            Skills = DeserializeList(analysis.Skills),
 
-            Education = analysis.Education,
+            Experience = DeserializeList(analysis.Experience),
 
-            Projects = analysis.Projects,
+            Education = DeserializeList(analysis.Education),
 
-            Certifications = analysis.Certifications,
+            Projects = DeserializeList(analysis.Projects),
 
-            Strengths = analysis.Strengths,
+            Certifications = DeserializeList(analysis.Certifications),
 
-            Weaknesses = analysis.Weaknesses,
+            Strengths = DeserializeList(analysis.Strengths),
+
+            Weaknesses = DeserializeList(analysis.Weaknesses),
+
 
             ResumeScore = analysis.ResumeScore,
 
             CreatedAt = analysis.CreatedAt
         };
+    }
+
+    private static List<string> DeserializeList(string json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return new List<string>();
+
+        return JsonSerializer.Deserialize<List<string>>(json)
+               ?? new List<string>();
     }
 }

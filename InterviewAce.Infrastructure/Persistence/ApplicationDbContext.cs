@@ -98,10 +98,10 @@ public class ApplicationDbContext : DbContext
     .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<ResumeAnalysis>()
-        .HasOne(x => x.Resume)
-        .WithOne(x => x.ResumeAnalysis)
-        .HasForeignKey<ResumeAnalysis>(x => x.ResumeId)
-        .OnDelete(DeleteBehavior.Cascade);
+    .HasOne(x => x.Resume)
+    .WithMany(x => x.ResumeAnalyses)
+    .HasForeignKey(x => x.ResumeId)
+    .OnDelete(DeleteBehavior.Cascade);
     }
 
 }

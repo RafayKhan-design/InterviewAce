@@ -31,5 +31,6 @@ public class Resume
     public User User { get; set; } = null!;
 
     // Navigation Property
-    public ResumeAnalysis? ResumeAnalysis { get; set; }
+    public ICollection<ResumeAnalysis> ResumeAnalyses { get; set; }
+    = new List<ResumeAnalysis>();
 }
