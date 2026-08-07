@@ -2,6 +2,7 @@
 using InterviewAce.Application.Interfaces.AI;
 using InterviewAce.Application.Interfaces.Extraction;
 using InterviewAce.Application.Interfaces.Persistence;
+using InterviewAce.Application.Interfaces.Processing;
 using InterviewAce.Application.Interfaces.ResumeAnalysis;
 using InterviewAce.Application.Interfaces.Storage;
 using ResumeAnalysisEntity = InterviewAce.Domain.Entities.ResumeAnalysis;
@@ -14,18 +15,20 @@ public class ResumeAnalysisService : IResumeAnalysisService
     private readonly IResumeAnalysisRepository _resumeAnalysisRepository;
     private readonly IResumeAnalyzer _resumeAnalyzer;
     private readonly IResumeTextExtractor _resumeTextExtractor;
-
+    private readonly ITextCleaner _textCleaner;
 
     public ResumeAnalysisService(
-        IResumeRepository resumeRepository,
-        IResumeAnalysisRepository resumeAnalysisRepository,
-        IResumeAnalyzer resumeAnalyzer,
-        IResumeTextExtractor resumeTextExtractor)
+    IResumeRepository resumeRepository,
+    IResumeAnalysisRepository resumeAnalysisRepository,
+    IResumeAnalyzer resumeAnalyzer,
+    IResumeTextExtractor resumeTextExtractor,
+    ITextCleaner textCleaner)
     {
         _resumeRepository = resumeRepository;
         _resumeAnalysisRepository = resumeAnalysisRepository;
         _resumeAnalyzer = resumeAnalyzer;
         _resumeTextExtractor = resumeTextExtractor;
+        _textCleaner = textCleaner;
     }
 
 
@@ -62,11 +65,14 @@ public class ResumeAnalysisService : IResumeAnalysisService
 
         // Extract text based on file type
         var extractedText = await _resumeTextExtractor
-            .ExtractTextAsync(
-                resume.FilePath,
-                resume.FileType
-            );
+    .ExtractTextAsync(
+        resume.FilePath,
+        resume.FileType
+    );
 
+
+        extractedText = _textCleaner
+            .Clean(extractedText);
 
 
         // AI Analysis

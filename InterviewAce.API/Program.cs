@@ -9,6 +9,7 @@ using InterviewAce.Application.Interfaces.Authentication;
 using InterviewAce.Application.Interfaces.Extraction;
 using InterviewAce.Application.Interfaces.JobDescription;
 using InterviewAce.Application.Interfaces.Persistence;
+using InterviewAce.Application.Interfaces.Processing;
 using InterviewAce.Application.Interfaces.Resume;
 using InterviewAce.Application.Interfaces.ResumeAnalysis;
 using InterviewAce.Application.Interfaces.Storage;
@@ -24,6 +25,7 @@ using InterviewAce.Infrastructure.Services;
 using InterviewAce.Infrastructure.Services.AI;
 using InterviewAce.Infrastructure.Services.Authentication;
 using InterviewAce.Infrastructure.Services.Extraction;
+using InterviewAce.Infrastructure.Services.Processing;
 using InterviewAce.Infrastructure.Services.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +40,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("Jwt"));
+
+builder.Services.Configure<AISettings>(
+    builder.Configuration.GetSection("AI"));
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -89,7 +94,13 @@ builder.Services.AddScoped<IJobDescriptionService, JobDescriptionService>();
 
 builder.Services.AddScoped<IResumeAnalysisService, ResumeAnalysisService>();
 
-builder.Services.AddScoped<IResumeAnalyzer, OpenAiResumeAnalyzer>();
+builder.Services.AddScoped<ITextCleaner, TextCleaner>();
+
+builder.Services.AddScoped<IResumeAnalyzer, AIResumeAnalyzer>();
+
+builder.Services.AddHttpClient<IAIProvider, GroqAIProvider>();
+
+//builder.Services.AddHttpClient<IAIProvider, GeminiAIProvider>();
 
 builder.Services.AddScoped<IProfileService, ProfileService>();
 
