@@ -1,6 +1,7 @@
 ﻿using InterviewAce.Application.Interfaces.Persistence;
 using InterviewAce.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using ResumeAnalysisEntity = InterviewAce.Domain.Entities.ResumeAnalysis;
 
 namespace InterviewAce.Infrastructure.Persistence.Repositories;
 
@@ -33,6 +34,17 @@ public class ResumeAnalysisRepository : IResumeAnalysisRepository
             .FirstOrDefaultAsync(
                 x => x.ResumeId == resumeId
             );
+    }
+
+    public async Task<ResumeAnalysisEntity?> GetByIdAsync(
+    Guid id,
+    Guid userId)
+    {
+        return await _context.ResumeAnalyses
+            .Include(x => x.Resume)
+            .FirstOrDefaultAsync(x =>
+                x.Id == id &&
+                x.Resume.UserId == userId);
     }
 
 

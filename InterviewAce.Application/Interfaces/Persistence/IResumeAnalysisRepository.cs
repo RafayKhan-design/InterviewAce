@@ -7,10 +7,12 @@ public interface IResumeAnalysisRepository
     Task AddAsync(
         ResumeAnalysisEntity analysis);
 
-
     Task<ResumeAnalysisEntity?> GetByResumeIdAsync(
         Guid resumeId);
 
+    Task<ResumeAnalysisEntity?> GetByIdAsync(
+        Guid id,
+        Guid userId);
 
     Task SaveChangesAsync();
 }

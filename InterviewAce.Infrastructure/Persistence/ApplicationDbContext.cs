@@ -25,6 +25,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<ResumeAnalysis> ResumeAnalyses { get; set; }
 
+    public DbSet<JobMatchAnalysis> JobMatchAnalyses { get; set; }
+
 
 
 
@@ -102,6 +104,26 @@ public class ApplicationDbContext : DbContext
     .WithMany(x => x.ResumeAnalyses)
     .HasForeignKey(x => x.ResumeId)
     .OnDelete(DeleteBehavior.Cascade);
+
+
+        // Job Match Analysis Configuration
+
+        modelBuilder.Entity<JobMatchAnalysis>()
+            .HasKey(x => x.Id);
+
+        modelBuilder.Entity<JobMatchAnalysis>()
+            .HasOne(x => x.ResumeAnalysis)
+            .WithMany()
+            .HasForeignKey(x => x.ResumeAnalysisId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<JobMatchAnalysis>()
+            .HasOne(x => x.JobDescription)
+            .WithMany()
+            .HasForeignKey(x => x.JobDescriptionId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
+
+
 
 }

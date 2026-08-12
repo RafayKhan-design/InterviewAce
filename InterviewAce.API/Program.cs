@@ -8,6 +8,7 @@ using InterviewAce.Application.Interfaces.AI;
 using InterviewAce.Application.Interfaces.Authentication;
 using InterviewAce.Application.Interfaces.Extraction;
 using InterviewAce.Application.Interfaces.JobDescription;
+using InterviewAce.Application.Interfaces.JobMatchAnalysis;
 using InterviewAce.Application.Interfaces.Persistence;
 using InterviewAce.Application.Interfaces.Processing;
 using InterviewAce.Application.Interfaces.Resume;
@@ -15,6 +16,7 @@ using InterviewAce.Application.Interfaces.ResumeAnalysis;
 using InterviewAce.Application.Interfaces.Storage;
 using InterviewAce.Application.Services.Authentication;
 using InterviewAce.Application.Services.JobDescription;
+using InterviewAce.Application.Services.JobMatchAnalysis;
 using InterviewAce.Application.Services.Profile;
 using InterviewAce.Application.Services.Resume;
 using InterviewAce.Application.Services.ResumeAnalysis;
@@ -114,11 +116,17 @@ builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
 builder.Services.AddScoped<IResumeTextExtractor, ResumeTextExtractor>();
 
+builder.Services.AddScoped<IJobMatchAnalysisRepository, JobMatchAnalysisRepository>();
+
 builder.Services.AddScoped<PdfTextExtractor>();
 
 builder.Services.AddScoped<DocxTextExtractor>();
 
 builder.Services.AddScoped<TxtTextExtractor>();
+
+builder.Services.AddScoped<IJobMatchAnalysisService, JobMatchAnalysisService>();
+
+
 
 
 
