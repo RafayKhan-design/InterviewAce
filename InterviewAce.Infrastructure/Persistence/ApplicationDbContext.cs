@@ -27,6 +27,10 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<JobMatchAnalysis> JobMatchAnalyses { get; set; }
 
+    public DbSet<Interview> Interviews { get; set; }
+
+    public DbSet<InterviewQuestion> InterviewQuestions { get; set; }
+
 
 
 
@@ -122,6 +126,38 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(x => x.JobDescriptionId)
             .OnDelete(DeleteBehavior.Cascade);
+
+       
+        
+        modelBuilder.Entity<Interview>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+
+            entity.HasOne(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(x => x.ResumeAnalysis)
+                .WithMany()
+                .HasForeignKey(x => x.ResumeAnalysisId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.JobDescription)
+                .WithMany()
+                .HasForeignKey(x => x.JobDescriptionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany(x => x.Questions)
+                .WithOne(x => x.Interview)
+                .HasForeignKey(x => x.InterviewId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<InterviewQuestion>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+        });
     }
 
 
