@@ -31,6 +31,10 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<InterviewQuestion> InterviewQuestions { get; set; }
 
+    public DbSet<InterviewSession> InterviewSessions { get; set; }
+
+    public DbSet<InterviewAnswer> InterviewAnswers { get; set; }
+
 
 
 
@@ -158,7 +162,54 @@ public class ApplicationDbContext : DbContext
         {
             entity.HasKey(x => x.Id);
         });
+
+        modelBuilder.Entity<InterviewSession>()
+    .HasOne(x => x.Interview)
+    .WithMany()
+    .HasForeignKey(x => x.InterviewId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<InterviewSession>()
+            .HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<InterviewAnswer>()
+            .HasOne(x => x.InterviewSession)
+            .WithMany(x => x.Answers)
+            .HasForeignKey(x => x.InterviewSessionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<InterviewAnswer>()
+            .HasOne(x => x.InterviewQuestion)
+            .WithMany()
+            .HasForeignKey(x => x.InterviewQuestionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
+        modelBuilder.Entity<InterviewAnswer>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+
+            entity.Property(a => a.AnswerText)
+                .IsRequired();
+
+            entity.Property(a => a.AnsweredAt)
+                .IsRequired();
+
+            entity.HasOne(a => a.InterviewSession)
+                .WithMany(s => s.Answers)
+                .HasForeignKey(a => a.InterviewSessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(a => a.InterviewQuestion)
+                .WithMany()
+                .HasForeignKey(a => a.InterviewQuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
     }
+
 
 
 

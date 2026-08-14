@@ -132,6 +132,14 @@ builder.Services.AddScoped<IInterviewRepository, InterviewRepository>();
 
 builder.Services.AddScoped<IInterviewService, InterviewService>();
 
+builder.Services.AddScoped<IInterviewSessionRepository, InterviewSessionRepository>();
+
+builder.Services.AddScoped<IInterviewSessionService, InterviewSessionService>();
+
+builder.Services.AddScoped<IInterviewAnswerRepository, InterviewAnswerRepository>();
+
+builder.Services.AddScoped<IInterviewAnswerService, InterviewAnswerService>();
+
 
 
 
