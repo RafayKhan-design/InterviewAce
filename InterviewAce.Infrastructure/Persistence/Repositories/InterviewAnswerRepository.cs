@@ -25,10 +25,12 @@ public class InterviewAnswerRepository : IInterviewAnswerRepository
         Guid userId)
     {
         return await _context.InterviewAnswers
-            .Include(a => a.InterviewSession)
-            .FirstOrDefaultAsync(a =>
-                a.Id == id &&
-                a.InterviewSession.Interview.UserId == userId);
+    .Include(a => a.InterviewSession)
+        .ThenInclude(s => s.Interview)
+    .Include(a => a.InterviewQuestion)
+    .FirstOrDefaultAsync(a =>
+        a.Id == id &&
+        a.InterviewSession.Interview.UserId == userId);
     }
 
     public async Task<List<InterviewAnswer>> GetBySessionIdAsync(

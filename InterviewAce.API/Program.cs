@@ -140,6 +140,10 @@ builder.Services.AddScoped<IInterviewAnswerRepository, InterviewAnswerRepository
 
 builder.Services.AddScoped<IInterviewAnswerService, InterviewAnswerService>();
 
+builder.Services.AddScoped<IAnswerEvaluationRepository, AnswerEvaluationRepository>();
+
+builder.Services.AddScoped<IAnswerEvaluationService, AnswerEvaluationService>();
+
 
 
 

@@ -3,6 +3,7 @@ using System;
 using InterviewAce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InterviewAce.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260814122450_AddAnswerEvaluations")]
+    partial class AddAnswerEvaluations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,10 +30,6 @@ namespace InterviewAce.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("AIModel")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -50,10 +49,6 @@ namespace InterviewAce.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PromptVersion")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("Score")
                         .HasColumnType("integer");
 
@@ -67,7 +62,8 @@ namespace InterviewAce.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InterviewAnswerId");
+                    b.HasIndex("InterviewAnswerId")
+                        .IsUnique();
 
                     b.ToTable("AnswerEvaluations");
                 });
@@ -496,8 +492,8 @@ namespace InterviewAce.Infrastructure.Migrations
             modelBuilder.Entity("InterviewAce.Domain.Entities.AnswerEvaluation", b =>
                 {
                     b.HasOne("InterviewAce.Domain.Entities.InterviewAnswer", "InterviewAnswer")
-                        .WithMany()
-                        .HasForeignKey("InterviewAnswerId")
+                        .WithOne()
+                        .HasForeignKey("InterviewAce.Domain.Entities.AnswerEvaluation", "InterviewAnswerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

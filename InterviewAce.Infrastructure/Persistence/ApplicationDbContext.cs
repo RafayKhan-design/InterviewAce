@@ -35,6 +35,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<InterviewAnswer> InterviewAnswers { get; set; }
 
+    public DbSet<AnswerEvaluation> AnswerEvaluations { get; set; }
+
 
 
 
@@ -208,6 +210,13 @@ public class ApplicationDbContext : DbContext
                 .HasForeignKey(a => a.InterviewQuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+
+        modelBuilder.Entity<AnswerEvaluation>()
+    .HasOne(x => x.InterviewAnswer)
+    .WithMany()
+    .HasForeignKey(x => x.InterviewAnswerId)
+    .OnDelete(DeleteBehavior.Cascade);
     }
 
 
