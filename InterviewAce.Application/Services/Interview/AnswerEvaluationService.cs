@@ -111,6 +111,81 @@ public class AnswerEvaluationService : IAnswerEvaluationService
         return MapToResponse(evaluation);
     }
 
+
+    public async Task<List<AnswerEvaluationResponseDto>> GetHistoryByAnswerIdAsync(
+    Guid userId,
+    Guid interviewAnswerId)
+    {
+        var answer = await _answerRepository.GetByIdAsync(
+            interviewAnswerId,
+            userId);
+
+        if (answer == null)
+        {
+            throw new KeyNotFoundException(
+                "Interview answer not found.");
+        }
+
+        var evaluations = await _evaluationRepository.GetByAnswerIdAsync(
+            interviewAnswerId);
+
+        return evaluations
+            .Select(MapToResponse)
+            .ToList();
+    }
+
+    public async Task<AnswerEvaluationProgressDto> GetProgressByAnswerIdAsync(
+    Guid userId,
+    Guid interviewAnswerId)
+    {
+        var answer = await _answerRepository.GetByIdAsync(
+            interviewAnswerId,
+            userId);
+
+        if (answer == null)
+        {
+            throw new KeyNotFoundException(
+                "Interview answer not found.");
+        }
+
+        var evaluations = await _evaluationRepository.GetByAnswerIdAsync(
+            interviewAnswerId);
+
+        if (evaluations.Count == 0)
+        {
+            throw new KeyNotFoundException(
+                "No evaluations found for this answer.");
+        }
+
+        var latest = evaluations
+            .OrderByDescending(x => x.CreatedAt)
+            .First();
+
+        var previous = evaluations
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip(1)
+            .FirstOrDefault();
+
+        return new AnswerEvaluationProgressDto
+        {
+            LatestScore = latest.Score,
+
+            PreviousScore = previous?.Score ?? latest.Score,
+
+            BestScore = evaluations.Max(x => x.Score),
+
+            AverageScore = Math.Round(
+                evaluations.Average(x => x.Score),
+                2),
+
+            EvaluationCount = evaluations.Count,
+
+            ScoreChange = previous == null
+                ? 0
+                : latest.Score - previous.Score
+        };
+    }
+
     private static string BuildPrompt(
     InterviewAnswer answer)
     {

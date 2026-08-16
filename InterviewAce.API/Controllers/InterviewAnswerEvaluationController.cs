@@ -74,4 +74,37 @@ public class InterviewAnswerEvaluationController : ControllerBase
             Data = result
         });
     }
+
+    [HttpGet("{interviewAnswerId:guid}/history")]
+    public async Task<IActionResult> GetHistory(
+    Guid interviewAnswerId)
+    {
+        var result = await _evaluationService.GetHistoryByAnswerIdAsync(
+            GetUserId(),
+            interviewAnswerId);
+
+        return Ok(new ApiResponseDto<List<AnswerEvaluationResponseDto>>
+        {
+            Success = true,
+            Message = "Interview answer evaluation history retrieved successfully.",
+            Data = result
+        });
+    }
+
+
+    [HttpGet("{interviewAnswerId:guid}/progress")]
+    public async Task<IActionResult> GetProgress(
+    Guid interviewAnswerId)
+    {
+        var result = await _evaluationService.GetProgressByAnswerIdAsync(
+            GetUserId(),
+            interviewAnswerId);
+
+        return Ok(new ApiResponseDto<AnswerEvaluationProgressDto>
+        {
+            Success = true,
+            Message = "Interview answer evaluation progress retrieved successfully.",
+            Data = result
+        });
+    }
 }
